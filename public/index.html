@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>Fact vs Bluff — Trivia, with a twist</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Fact vs Bluff home"><span class="brand-mark">F<span>?</span></span><span>FACT <b>VS</b> BLUFF</span></a>
+      <span class="online-pill"><span class="pulse"></span> LIVE PARTY GAME</span>
+    </header>
+
+    <section id="homeView" class="hero-view">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="sparkle">✦</span> THINK FAST. BLUFF BETTER.</div>
+        <h1>Can you spot<br>the <span class="gradient-text">bluff?</span></h1>
+        <p class="hero-description">One real fact. A room full of fake answers. Trust your instincts — and try not to get caught bluffing.</p>
+        <div class="feature-row">
+          <span><span class="feature-icon">⚡</span> Real-time play</span>
+          <span><span class="feature-icon">🎭</span> Clever bluffs</span>
+          <span><span class="feature-icon">🏆</span> Friendly rivalry</span>
+        </div>
+      </div>
+      <div class="join-card">
+        <div class="card-heading"><span class="mini-icon">✦</span><div><h2>Join the fun</h2><p>Start a room or jump into a game.</p></div></div>
+        <form id="createForm">
+          <label for="createName">YOUR PLAYER NAME</label>
+          <input id="createName" maxlength="18" placeholder="e.g. Quiz Wizard" autocomplete="nickname" required>
+          <button class="button button-primary" type="submit">Create a room <span>↗</span></button>
+        </form>
+        <div class="or-divider"><span></span> OR JOIN A ROOM <span></span></div>
+        <form id="joinForm">
+          <label for="joinName">YOUR PLAYER NAME</label>
+          <input id="joinName" maxlength="18" placeholder="What should we call you?" autocomplete="nickname" required>
+          <label for="roomCode">ROOM CODE</label>
+          <input id="roomCode" class="code-input" maxlength="6" placeholder="ABC123" autocapitalize="characters" required>
+          <button class="button button-secondary" type="submit">Join room <span>→</span></button>
+        </form>
+        <p class="card-footnote">No account needed · Up to 12 players</p>
+      </div>
+    </section>
+
+    <section id="gameView" class="game-view hidden">
+      <div class="game-topline">
+        <button id="leaveButton" class="text-button">← Leave game</button>
+        <div class="room-badge">ROOM <strong id="roomCodeLabel">------</strong><button id="copyCode" title="Copy room code" aria-label="Copy room code">▢</button></div>
+      </div>
+      <div class="game-layout">
+        <section class="main-panel">
+          <div class="round-meta"><span id="phasePill" class="phase-pill">LOBBY</span><span id="roundLabel">Ready to play</span></div>
+          <div id="lobbyPanel" class="stage-panel">
+            <div class="stage-emoji">🎲</div><h1>Room is ready.</h1>
+            <p>Invite your friends with the room code. The host can start when at least two players have joined.</p>
+            <div class="invite-code"><span id="bigRoomCode">------</span><button id="copyBigCode">Copy code</button></div>
+            <button id="startButton" class="button button-primary wide" disabled>Start first round <span>→</span></button>
+            <p id="lobbyHint" class="subtle">Waiting for another player to join…</p>
+          </div>
+          <div id="bluffPanel" class="stage-panel hidden">
+            <div class="question-label">THE TRIVIA QUESTION</div><h1 id="questionText" class="question-text"></h1>
+            <p class="stage-instruction">Make up a convincing answer. Everyone else will see it — and might believe you.</p>
+            <form id="bluffForm" class="answer-form"><input id="bluffInput" maxlength="120" placeholder="Type your fake answer…" required><button class="button button-primary" type="submit">Submit bluff <span>↗</span></button></form>
+            <div id="submittedState" class="waiting-state hidden"><span class="waiting-icon">✓</span><div><strong>Bluff locked in!</strong><p>Waiting for the other players…</p></div></div>
+            <div class="progress-track"><div id="submissionProgress" class="progress-fill"></div></div>
+            <p id="submissionCount" class="subtle">0 of 0 answers submitted</p>
+          </div>
+          <div id="votePanel" class="stage-panel hidden">
+            <div class="question-label">PICK THE REAL FACT</div><h1 id="voteQuestion" class="question-text"></h1>
+            <p class="stage-instruction">Which answer is true? Choose carefully — fake answers earn their authors points.</p>
+            <div id="optionsList" class="options-list"></div>
+            <div id="votedState" class="waiting-state hidden"><span class="waiting-icon">✓</span><div><strong>Vote submitted!</strong><p>Waiting for everyone to vote…</p></div></div>
+            <p id="voteCount" class="subtle"></p>
+          </div>
+          <div id="resultsPanel" class="stage-panel hidden">
+            <div class="stage-emoji">🏆</div><h1>That's the truth.</h1><p class="stage-instruction">Here's how the room voted. Check the leaderboard to see who came out on top.</p>
+            <div id="resultsList" class="options-list results-list"></div>
+            <div class="real-answer"><span>THE REAL ANSWER</span><strong id="correctAnswer"></strong></div>
+            <button id="nextButton" class="button button-primary wide hidden">Next round <span>→</span></button>
+            <p id="resultsHint" class="subtle"></p>
+          </div>
+          <div id="toast" class="toast hidden" role="status"></div>
+        </section>
+        <aside class="sidebar">
+          <div class="sidebar-heading"><div><h2>Players</h2><p id="playerCountLabel">0 in room</p></div><span class="people-icon">♙</span></div>
+          <div id="playersList" class="players-list"></div>
+          <div class="score-key"><span class="score-dot truth"></span><span>Correct guess</span><strong>+100</strong></div>
+          <div class="score-key"><span class="score-dot bluff"></span><span>Bluff fools someone</span><strong>+50</strong></div>
+          <div class="sidebar-note"><span>💡</span><p><strong>Pro tip</strong><br>The best bluff sounds just believable enough.</p></div>
+        </aside>
+      </div>
+    </section>
+    <footer><span>FACT VS BLUFF</span><span>Good facts. Better lies. Great friends.</span><span>V1.0</span></footer>
+  </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
